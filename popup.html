@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A11y Text Multiplier</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #1a1a1f;
+      --border: #2e2e38;
+      --accent: #7effb2;
+      --accent2: #ff7eb6;
+      --text: #e8e8f0;
+      --muted: #666680;
+      --radius: 8px;
+    }
+
+    body {
+      width: 280px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 16px;
+      user-select: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: #0f0f11;
+      letter-spacing: -0.5px;
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .multiplier-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .mult-btn {
+      flex: 1;
+      padding: 10px 0;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .mult-btn span.example {
+      font-size: 9px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .mult-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .mult-btn.active {
+      border-color: var(--accent);
+      background: rgba(126, 255, 178, 0.08);
+      color: var(--accent);
+    }
+
+    .mult-btn.active span.example {
+      color: var(--accent);
+      opacity: 0.6;
+    }
+
+    .preview-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      min-height: 44px;
+    }
+
+    .preview-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .preview-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .preview-text .original { color: var(--muted); }
+    .preview-text .added { color: var(--accent); }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-apply {
+      flex: 1;
+      padding: 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: #0f0f11;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-apply:hover { opacity: 0.85; }
+    .btn-apply:active { opacity: 0.7; }
+
+    .btn-reset {
+      padding: 10px 14px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .status {
+      font-size: 10px;
+      color: var(--accent);
+      text-align: center;
+      margin-top: 10px;
+      min-height: 14px;
+      font-family: 'DM Mono', monospace;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .status.show { opacity: 1; }
+    .status.reset { color: var(--accent2); }
+
+    .auto-apply {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .auto-apply input[type="checkbox"] {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 3px;
+      background: var(--surface);
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .auto-apply input[type="checkbox"]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .auto-apply input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 0px;
+      width: 4px;
+      height: 8px;
+      border: 2px solid #0f0f11;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .auto-apply:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">A11y</div>
+    <div>
+      <div class="title">Text Multiplier</div>
+      <div class="subtitle">Test text overflow &amp; scaling</div>
+    </div>
+  </div>
+
+  <div class="section-label">Multiplier</div>
+  <div class="multiplier-group">
+    <button class="mult-btn active" data-value="1.5">
+      1.5×
+    </button>
+    <button class="mult-btn" data-value="2">
+      2×
+    </button>
+    <button class="mult-btn" data-value="3">
+      3×
+    </button>
+  </div>
+
+  <div class="preview-box">
+    <div class="preview-label">Preview</div>
+    <div class="preview-text" id="preview">
+      <span class="original">hello world</span><span class="added"> hello wor</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-apply" id="applyBtn">Apply</button>
+    <button class="btn-reset" id="resetBtn">Reset</button>
+  </div>
+
+  <label class="auto-apply">
+    <input type="checkbox" id="autoApply">
+    Remember on refresh (resets when tab is closed)
+  </label>
+
+  <div class="status" id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
