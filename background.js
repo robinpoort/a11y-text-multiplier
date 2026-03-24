@@ -1,5 +1,5 @@
 // A11y Text Multiplier — background.js
-// Updates the toolbar icon based on the autoApply setting and active multiplier
+// Updates the toolbar icon per tab based on whether a multiplier is active on that tab
 
 function drawIcon(active, multiplier) {
   const size = 64;
@@ -25,20 +25,53 @@ function drawIcon(active, multiplier) {
   return ctx.getImageData(0, 0, size, size);
 }
 
-function updateIcon(active, multiplier) {
-  chrome.action.setIcon({ imageData: { 64: drawIcon(active, multiplier) } });
+function isRestricted(url) {
+  return !url ||
+    url.startsWith('chrome://') ||
+    url.startsWith('chrome-extension://') ||
+    url.startsWith('about:') ||
+    url.startsWith('edge://');
 }
 
-// Set icon on startup
-chrome.storage.local.get(['autoApply', 'currentMultiplier'], ({ autoApply, currentMultiplier }) => {
-  updateIcon(!!autoApply, currentMultiplier ?? null);
+function setIcon(tabId, active, multiplier) {
+  const img = drawIcon(active, multiplier);
+  if (tabId != null) {
+    chrome.action.setIcon({ tabId, imageData: { 64: img } });
+  } else {
+    chrome.action.setIcon({ imageData: { 64: img } });
+  }
+}
+
+async function updateIconForTab(tabId) {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    if (isRestricted(tab.url)) {
+      setIcon(tabId, false, null);
+      return;
+    }
+    chrome.tabs.sendMessage(tabId, { action: 'getState' }, (res) => {
+      if (chrome.runtime.lastError || !res?.multiplier) {
+        setIcon(tabId, false, null);
+      } else {
+        setIcon(tabId, true, res.multiplier);
+      }
+    });
+  } catch (e) {}
+}
+
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+  updateIconForTab(tabId);
 });
 
-// Update icon whenever the setting or multiplier changes
-chrome.storage.onChanged.addListener((changes) => {
-  if ('autoApply' in changes || 'currentMultiplier' in changes) {
-    chrome.storage.local.get(['autoApply', 'currentMultiplier'], ({ autoApply, currentMultiplier }) => {
-      updateIcon(!!autoApply, currentMultiplier ?? null);
-    });
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status === 'complete') {
+    updateIconForTab(tabId);
+  }
+});
+
+// Triggered by popup after apply/reset
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.action === 'updateIcon' && msg.tabId != null) {
+    updateIconForTab(msg.tabId);
   }
 });

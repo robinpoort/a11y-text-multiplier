@@ -58,6 +58,8 @@ document.getElementById('applyBtn').addEventListener('click', async () => {
   if (!isInjectableUrl(tab.url)) { showStatus('⚠ Cannot run on this page'); return; }
   await injectContentScript(tab.id);
 
+  const autoApply = document.getElementById('autoApply').checked;
+
   chrome.tabs.sendMessage(tab.id, { action: 'apply', multiplier: selectedMultiplier }, (res) => {
     if (chrome.runtime.lastError) {
       showStatus('⚠ Could not inject');
@@ -66,11 +68,10 @@ document.getElementById('applyBtn').addEventListener('click', async () => {
     showStatus(`✓ ${selectedMultiplier}× applied`);
   });
 
-  chrome.storage.local.set({ currentMultiplier: selectedMultiplier });
-
-  const autoApply = document.getElementById('autoApply').checked;
   if (autoApply) {
-    chrome.tabs.sendMessage(tab.id, { action: 'save', multiplier: selectedMultiplier });
+    chrome.tabs.sendMessage(tab.id, { action: 'save', multiplier: selectedMultiplier }, () => {
+      chrome.runtime.sendMessage({ action: 'updateIcon', tabId: tab.id });
+    });
   }
 });
 
@@ -94,8 +95,9 @@ document.getElementById('resetBtn').addEventListener('click', async () => {
   });
 
   // Clear saved state so it doesn't re-apply on next refresh
-  chrome.tabs.sendMessage(tab.id, { action: 'clearSave' });
-  chrome.storage.local.remove('currentMultiplier');
+  chrome.tabs.sendMessage(tab.id, { action: 'clearSave' }, () => {
+    chrome.runtime.sendMessage({ action: 'updateIcon', tabId: tab.id });
+  });
 
 });
 
