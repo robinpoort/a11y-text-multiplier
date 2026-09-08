@@ -1,0 +1,179 @@
+{
+  "appName": {
+    "message": "Spill: test tekstoverloop en vertaallengte"
+  },
+  "appDesc": {
+    "message": "Vermenigvuldig de tekst op elke pagina en zie wat er overloopt: de knoppen, koppen en kaarten die alleen passen in de taal waarin ze zijn ontworpen."
+  },
+  "appShortName": {
+    "message": "Spill"
+  },
+  "uiViewLabel": {
+    "message": "Weergave"
+  },
+  "uiTabMultiply": {
+    "message": "Vermenigvuldigen"
+  },
+  "uiTabSettings": {
+    "message": "Instellingen"
+  },
+  "uiMultiplier": {
+    "message": "Factor"
+  },
+  "uiMultiplierValue": {
+    "message": "$P1$×",
+    "description": "A multiplier chip. $P1$ is the number, formatted for the reader's locale.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiPreview": {
+    "message": "Voorbeeld"
+  },
+  "uiSample": {
+    "message": "hallo wereld",
+    "description": "The sample text in the preview box. Two short words, so the half-multiplier visibly cuts the second one."
+  },
+  "uiApply": {
+    "message": "Toepassen"
+  },
+  "uiApplied": {
+    "message": "Toegepast"
+  },
+  "uiReset": {
+    "message": "Herstellen"
+  },
+  "uiResetDone": {
+    "message": "Hersteld"
+  },
+  "uiRemember": {
+    "message": "Behouden na verversen"
+  },
+  "uiRememberNote": {
+    "message": "De tekst terugzetten na een herlaadbeurt betekent draaien op de pagina voordat je ergens op hebt geklikt, en dat mag van Chrome alleen met toestemming voor de sites die je bezoekt. De rest van Spill heeft het niet nodig. Zet je dit uit, dan gaat de toestemming meteen terug. Wat bewaard wordt geldt voor dat ene tabblad en vervalt zodra je het sluit."
+  },
+  "uiRememberShort": {
+    "message": "Vraagt toestemming."
+  },
+  "uiWhy": {
+    "message": "Waarom?"
+  },
+  "uiClose": {
+    "message": "Sluiten"
+  },
+  "uiStatusApplied": {
+    "message": "Tekst vermenigvuldigd met $P1$×",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiStatusReset": {
+    "message": "Oorspronkelijke tekst hersteld"
+  },
+  "uiAll": {
+    "message": "Alles"
+  },
+  "uiSettingsFactors": {
+    "message": "Factoren"
+  },
+  "uiSettingsFactorsNote": {
+    "message": "Druk op een factor om hem van de lijst te halen. Korte Duitse labels zijn ongeveer 1,35× zo lang als het Engelse origineel, en dat is geen van de drie waarmee je begint."
+  },
+  "uiSettingsFactorAdd": {
+    "message": "Toevoegen"
+  },
+  "uiSettingsFactorNew": {
+    "message": "Nieuwe factor"
+  },
+  "uiSettingsFactorRemove": {
+    "message": "$P1$× verwijderen",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiSettingsFactorRange": {
+    "message": "Een factor ligt tussen $P1$ en $P2$.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      }
+    }
+  },
+  "uiSettingsFactorExists": {
+    "message": "Die staat er al."
+  },
+  "uiSettingsFactorMax": {
+    "message": "$P1$ is het maximum dat past.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiSettingsAttributes": {
+    "message": "Attributen"
+  },
+  "uiSettingsAttributesNote": {
+    "message": "Staat uit om te beginnen. Een tekstnode is wat de pagina toont, een attribuut is wat hij doorgeeft aan een tooltip of een screenreader. placeholder en title veranderen de layout, alt en aria-label testen of een label te lang wordt om naar te luisteren."
+  },
+  "uiSettingsSkip": {
+    "message": "Met rust laten"
+  },
+  "uiSettingsSkipNote": {
+    "message": "CSS-selectors, gescheiden door komma’s. Scripts, styles en de velden waar je zelf in typt blijven sowieso ongemoeid."
+  },
+  "uiSettingsSkipPlaceholder": {
+    "message": "code, pre, .no-multiply"
+  },
+  "uiSettingsSkipInvalid": {
+    "message": "Chrome leest dat niet als een selector."
+  },
+  "uiSettingsHighlight": {
+    "message": "Markeren"
+  },
+  "uiSettingsHighlightLabel": {
+    "message": "Omlijn alles wat langer werd"
+  },
+  "uiSettingsHighlightColour": {
+    "message": "Kleur van de omlijning"
+  },
+  "uiSettingsHighlightNote": {
+    "message": "Laat zien wat wél en niet bereikt is: tekst die uit CSS komt, een attribuut dat je uit hebt staan of iets binnen een iframe blijft zoals het was."
+  },
+  "uiSettingsReset": {
+    "message": "Standaard terugzetten"
+  },
+  "uiSettingsResetDone": {
+    "message": "Teruggezet"
+  },
+  "uiSettingsNote": {
+    "message": "Blijft op dit apparaat staan en geldt vanaf de volgende keer dat je Toepassen indrukt."
+  },
+  "uiErrCannotRun": {
+    "message": "Kan deze pagina niet aanpassen"
+  },
+  "uiErrInternalPages": {
+    "message": "Op interne pagina’s (chrome://, de Web Store, de PDF-viewer) mag een extensie niets doen. Open een gewone website."
+  },
+  "uiErrNoAnswer": {
+    "message": "De pagina gaf geen antwoord. Ververs hem en probeer het opnieuw."
+  },
+  "uiErrNoAccess": {
+    "message": "Toestemming niet gegeven"
+  },
+  "uiErrNoAccessWhy": {
+    "message": "Zonder die toestemming kan een factor een verversing niet overleven. De rest werkt precies zoals eerst."
+  },
+  "uiAuthorRole": {
+    "message": "front-end designer"
+  }
+}

@@ -1,77 +1,61 @@
-// A11y Text Multiplier — background.js
-// Updates the toolbar icon per tab based on whether a multiplier is active on that tab
+/**
+ * Spill — background.js
+ *
+ * One job: keep the toolbar badge in step with what each tab is actually showing.
+ *
+ * The page reports that itself. Chrome wipes a tab's badge the moment it navigates, and
+ * this worker cannot ask a page anything without a host permission the extension does not
+ * want — so content.js says what it ended up with, on load and after every change, and
+ * that report is the only thing acted on here.
+ *
+ * Reading it back off a tab's stored state instead meant guessing when to re-assert the
+ * badge from `tabs.onUpdated`, which without the `tabs` permission hands over a
+ * changeInfo with the interesting parts taken out. The page knows; let it say so.
+ *
+ * It also keeps the optional content script in step with the permission that pays for it.
+ */
 
-function drawIcon(active, multiplier) {
-  const size = 64;
-  const canvas = new OffscreenCanvas(size, size);
-  const ctx = canvas.getContext('2d');
+import { ORIGINS, registerPersistentScript, unregisterPersistentScript } from './hostaccess.js';
 
-  // Background
-  ctx.fillStyle = active ? '#7effb2' : '#3a3a4a';
-  ctx.beginPath();
-  ctx.roundRect(0, 0, size, size, 12);
-  ctx.fill();
-
-  // Label: multiplier value when active, "A" otherwise
-  const label = active && multiplier ? String(multiplier) : 'A';
-  ctx.fillStyle = active ? '#0f0f11' : '#888899';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  ctx.font = 'bold 48px sans-serif';
-
-  ctx.fillText(label, size / 2, size / 2 + 2);
-
-  return ctx.getImageData(0, 0, size, size);
+/**
+ * The registered content script follows the permission, wherever that was changed — the
+ * switch in the popup, or chrome://extensions taking it back. It lives here rather than in
+ * the popup because a popup is gone the moment Chrome's permission dialog opens over it,
+ * and because this way the two can never drift apart.
+ */
+async function syncPersistentScript() {
+  if (await chrome.permissions.contains(ORIGINS)) await registerPersistentScript();
+  else await unregisterPersistentScript();
 }
 
-function isRestricted(url) {
-  return !url ||
-    url.startsWith('chrome://') ||
-    url.startsWith('chrome-extension://') ||
-    url.startsWith('about:') ||
-    url.startsWith('edge://');
-}
+chrome.runtime.onInstalled.addListener(syncPersistentScript);
+chrome.runtime.onStartup.addListener(syncPersistentScript);
+chrome.permissions.onAdded.addListener(syncPersistentScript);
+chrome.permissions.onRemoved.addListener(syncPersistentScript);
 
-function setIcon(tabId, active, multiplier) {
-  const img = drawIcon(active, multiplier);
-  if (tabId != null) {
-    chrome.action.setIcon({ tabId, imageData: { 64: img } });
-  } else {
-    chrome.action.setIcon({ imageData: { 64: img } });
-  }
-}
+// The brand blue with white on it, the same pair the popup's own buttons use. A badge
+// rather than an icon drawn per tab: Chrome sizes and places it for whatever toolbar the
+// reader is running, light or dark, which a canvas in a service worker can only guess at.
+const BADGE_BG = '#0042ff';
+const BADGE_FG = '#ffffff';
 
-async function updateIconForTab(tabId) {
-  try {
-    const tab = await chrome.tabs.get(tabId);
-    if (isRestricted(tab.url)) {
-      setIcon(tabId, false, null);
-      return;
-    }
-    chrome.tabs.sendMessage(tabId, { action: 'getState' }, (res) => {
-      if (chrome.runtime.lastError || !res?.multiplier) {
-        setIcon(tabId, false, null);
-      } else {
-        setIcon(tabId, true, res.multiplier);
-      }
+// The worker is stopped and started whenever Chrome sees fit, so this runs again on every
+// start. Setting a colour that is already set costs nothing.
+chrome.action.setBadgeBackgroundColor({ color: BADGE_BG });
+chrome.action.setBadgeTextColor?.({ color: BADGE_FG });
+
+// 1.5 is "1,5" to a Dutch reader, the same as on the chip it came from.
+const format = (multiplier) =>
+  new Intl.NumberFormat(chrome.i18n.getUILanguage()).format(multiplier);
+
+chrome.runtime.onMessage.addListener((message, sender) => {
+  // Only a page reports on itself, and only ever about the tab it is sitting in — which
+  // Chrome fills in, so a report can never be about someone else's tab.
+  if (message?.action !== 'pageState' || !sender.tab) return;
+
+  chrome.action
+    .setBadgeText({ tabId: sender.tab.id, text: message.multiplier ? format(message.multiplier) : '' })
+    .catch(() => {
+      // The tab closed between the report and this call. Nothing left to label.
     });
-  } catch (e) {}
-}
-
-chrome.tabs.onActivated.addListener(({ tabId }) => {
-  updateIconForTab(tabId);
-});
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (changeInfo.status === 'complete') {
-    updateIconForTab(tabId);
-  }
-});
-
-// Triggered by popup after apply/reset
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.action === 'updateIcon' && msg.tabId != null) {
-    updateIconForTab(msg.tabId);
-  }
 });

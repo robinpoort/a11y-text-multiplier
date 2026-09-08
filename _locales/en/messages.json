@@ -1,0 +1,179 @@
+{
+  "appName": {
+    "message": "Spill: Text Overflow & Translation Length Tester"
+  },
+  "appDesc": {
+    "message": "Multiply the text on any page and watch what spills: the buttons, headings and cards that only fit the language they were designed in."
+  },
+  "appShortName": {
+    "message": "Spill"
+  },
+  "uiViewLabel": {
+    "message": "View"
+  },
+  "uiTabMultiply": {
+    "message": "Multiply"
+  },
+  "uiTabSettings": {
+    "message": "Settings"
+  },
+  "uiMultiplier": {
+    "message": "Multiplier"
+  },
+  "uiMultiplierValue": {
+    "message": "$P1$×",
+    "description": "A multiplier chip. $P1$ is the number, formatted for the reader's locale.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiPreview": {
+    "message": "Preview"
+  },
+  "uiSample": {
+    "message": "hello world",
+    "description": "The sample text in the preview box. Two short words, so the half-multiplier visibly cuts the second one."
+  },
+  "uiApply": {
+    "message": "Apply"
+  },
+  "uiApplied": {
+    "message": "Applied"
+  },
+  "uiReset": {
+    "message": "Reset"
+  },
+  "uiResetDone": {
+    "message": "Restored"
+  },
+  "uiRemember": {
+    "message": "Keep it after a refresh"
+  },
+  "uiRememberNote": {
+    "message": "Putting the text back after a reload means running on the page before you have clicked anything, and Chrome only allows that with permission for the sites you visit. Nothing else here needs it. Switch this off and the permission goes straight back. What is kept is kept for that one tab, and cleared the moment you close it."
+  },
+  "uiRememberShort": {
+    "message": "Asks permission."
+  },
+  "uiWhy": {
+    "message": "Why?"
+  },
+  "uiClose": {
+    "message": "Close"
+  },
+  "uiStatusApplied": {
+    "message": "Text multiplied by $P1$×",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiStatusReset": {
+    "message": "Original text restored"
+  },
+  "uiAll": {
+    "message": "All"
+  },
+  "uiSettingsFactors": {
+    "message": "Factors"
+  },
+  "uiSettingsFactorsNote": {
+    "message": "Press a factor to take it off the list. Short German labels run about 1.35× the length of their English originals, which is none of the three you start with."
+  },
+  "uiSettingsFactorAdd": {
+    "message": "Add"
+  },
+  "uiSettingsFactorNew": {
+    "message": "New factor"
+  },
+  "uiSettingsFactorRemove": {
+    "message": "Remove $P1$×",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiSettingsFactorRange": {
+    "message": "A factor is between $P1$ and $P2$.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      }
+    }
+  },
+  "uiSettingsFactorExists": {
+    "message": "That one is already in the list."
+  },
+  "uiSettingsFactorMax": {
+    "message": "$P1$ is as many as fit.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "uiSettingsAttributes": {
+    "message": "Attributes"
+  },
+  "uiSettingsAttributesNote": {
+    "message": "Off to begin with. A text node is what the page shows; an attribute is what it hands to a tooltip or a screen reader. placeholder and title change the layout, alt and aria-label test whether a label gets too long to listen to."
+  },
+  "uiSettingsSkip": {
+    "message": "Leave alone"
+  },
+  "uiSettingsSkipNote": {
+    "message": "CSS selectors, separated by commas. Scripts, styles and the fields you type in are always left alone."
+  },
+  "uiSettingsSkipPlaceholder": {
+    "message": "code, pre, .no-multiply"
+  },
+  "uiSettingsSkipInvalid": {
+    "message": "Chrome does not read that as a selector."
+  },
+  "uiSettingsHighlight": {
+    "message": "Highlight"
+  },
+  "uiSettingsHighlightLabel": {
+    "message": "Outline everything that got longer"
+  },
+  "uiSettingsHighlightColour": {
+    "message": "Outline colour"
+  },
+  "uiSettingsHighlightNote": {
+    "message": "Shows what was reached and what was not: text drawn from CSS, an attribute you left switched off, or anything inside an iframe stays as it was."
+  },
+  "uiSettingsReset": {
+    "message": "Restore defaults"
+  },
+  "uiSettingsResetDone": {
+    "message": "Restored"
+  },
+  "uiSettingsNote": {
+    "message": "Kept on this device, and used the next time you press Apply."
+  },
+  "uiErrCannotRun": {
+    "message": "Cannot change this page"
+  },
+  "uiErrInternalPages": {
+    "message": "Extensions are not allowed to run on internal pages (chrome://, the Web Store, the PDF viewer). Open a regular website."
+  },
+  "uiErrNoAnswer": {
+    "message": "The page did not answer. Reload it and try again."
+  },
+  "uiErrNoAccess": {
+    "message": "Permission not given"
+  },
+  "uiErrNoAccessWhy": {
+    "message": "Without it a multiplier cannot survive a refresh. Everything else works exactly as before."
+  },
+  "uiAuthorRole": {
+    "message": "front-end designer"
+  }
+}
